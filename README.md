@@ -28,7 +28,7 @@ Deploy to AWS Singapore
 먼저 AWS 콘솔에 로그인하여 새 노트북 인스턴스를 생성 합니다.
 
 다음으로 Amazon Forecast의 [supported region](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/)에 있는지 확인합니다. 위 CloudFormation으로 생성이 가능하며, Singapore 이외 리전에서 수행하고자 할 경우, 위 CloudFormation을 클릭하여 들어간 다음 AWS console 화면의 오른쪽 상단에서 리전을 변경하면 됩니다. 
-CloudFormation이 성공적으로 완성된 다음 AWS `서비스 찾기`에서 `SageMaker`를 입력 한 다음 드롭 다운에서 선택합니다.
-왼쪽에 `노트북`이라는 카테고리가 표시되면 `노트북 인스턴스`를 클릭하면, `forecast-demolab-XXX` 이름의 노트북에 대해 `Open Jupyter` or `Open JupyterLab`을 클릭합니다.
+CloudFormation이 성공적으로 완성된 다음 AWS **서비스 찾기**에서 **SageMaker**를 입력 한 다음 드롭 다운에서 선택합니다.
+왼쪽에 **노트북**이라는 카테고리가 표시되면 **노트북 인스턴스**를 클릭하면, **forecast-demolab-XXX** 이름의 노트북에 대해 **Open Jupyter** or **Open JupyterLab**을 클릭합니다.
 
 노트북은 번호 순서대로 수행하면 되고, 노트북에 수정해야 할 부분이 있기에 이 부분은 **CloudFormation**의 **output**을 참고하여 수정해야 합니다.
