@@ -2,7 +2,7 @@
 
 이 데모는 기존 영문으로 된 [Amazon Forecast workshop](https://github.com/apac-ml-tfc/forecasting-workshop.git) 자료에 부가설명은 한글로 추가하였습니다.
 
-이 데모는 Amazon 예측 서비스인 [Amazon Forecast](https://aws.amazon.com/forecast/)을 AI/ML 플랫폼인 [Amazon SageMaker](https://aws.amazon.com/sagemaker/)에서 데이터 준비 작업을 수행한 다음, Forecast에 적합한 데이터를 이용하여 예측 서비스를 제공하게 됩니다. 이후 Forecast에서 제공되는 [DeepAR](https://arxiv.org/abs/1704.04110) 및 [Prophet](https://peerj.com/preprints/3190.pdf)을 이용하여 예측 모델을 생성합니다. 추가적으로, SageMaker에서 사용할 수 있는 DeepAR을 학습한 다음 Forecast에서 학습된 다른 모델과 비교하여 ** 시계열 예측 ** 문제를 해결하는 사례를 보여줍니다. 
+이 데모는 Amazon 예측 서비스인 [Amazon Forecast](https://aws.amazon.com/forecast/)을 AI/ML 플랫폼인 [Amazon SageMaker](https://aws.amazon.com/sagemaker/)에서 데이터 준비 작업을 수행한 다음, Forecast에 적합한 데이터를 이용하여 예측 서비스를 제공하게 됩니다. 이후 Forecast에서 제공되는 [DeepAR](https://arxiv.org/abs/1704.04110) 및 [Prophet](https://peerj.com/preprints/3190.pdf)을 이용하여 예측 모델을 생성합니다. 추가적으로, SageMaker에서 사용할 수 있는 DeepAR을 학습한 다음 Forecast에서 학습된 다른 모델과 비교하여 **시계열 예측** 문제를 해결하는 사례를 보여줍니다. 
 
 데모는 Amazon SageMaker에서 실행되도록 설계된 일련의 Python 노트북으로 제공되지만 실제 Forecast 모델을 생성하는 과정은 AWS 콘솔에서 수행하게 됩니다.
 
