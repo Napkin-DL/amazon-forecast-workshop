@@ -14,10 +14,10 @@
 <thead>
 
 <tr>
-<td align="center">Singapore (ap-southeast-1)</td>
-<td align="left"><a  href="https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/create/review?stackName=ForecastDemoLab&amp;templateURL=https://napkin-share.s3.ap-northeast-2.amazonaws.com/cloudformation/amazon-forecast.yml&amp;" target="_blank"  class="btn btn-default">
+<td align="center">US East (N. Virginia) (us-east-1)</td>
+<td align="left"><a  href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/review?stackName=ForecastDemoLab&amp;templateURL=https://napkin-share.s3.ap-northeast-2.amazonaws.com/cloudformation/amazon-forecast.yml&amp;" target="_blank"  class="btn btn-default">
   <i class="fas fa-play"></i>
-Deploy to AWS Singapore
+Deploy to AWS US East (N. Virginia)
 </a>
 </td>
 </tr>
