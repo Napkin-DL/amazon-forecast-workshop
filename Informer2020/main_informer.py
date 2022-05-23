@@ -63,7 +63,6 @@ def arg_setting():
     parser.add_argument('--use_gpu', type=bool, default=True, help='use gpu')
     parser.add_argument('--gpu', type=int, default=0, help='gpu')
     parser.add_argument('--use_multi_gpu', type=lambda s:s.lower() in ['true', 't', 'yes', '1'], help='use multiple gpus', default=False)
-    parser.add_argument('--smddp', type=lambda s:s.lower() in ['true', 't', 'yes', '1'], help='use SageMaker DDP', default=False)
 
 #     parser.add_argument('--devices', type=str, default='0,1,2,3',help='device ids of multile gpus')
 
@@ -81,7 +80,7 @@ def check_sagemaker(args):
 
     if os.environ.get('SM_MODEL_DIR') is not None:
         args.root_path = os.environ['SM_CHANNEL_TRAINING']+args.root_path
-        args.checkpoints = os.environ['SM_MODEL_DIR']
+        args.checkpoints = "/opt/ml/checkpoints"
     return args
 
 
@@ -91,8 +90,8 @@ def main(args):
     args.device = torch.device("cuda" if args.use_gpu else "cpu")
     
     if args.use_gpu:
-        print(f"args.smddp : {args.smddp}")
-        if args.smddp:
+        print(f"args.use_multi_gpu : {args.use_multi_gpu}")
+        if args.use_multi_gpu:
             ## 1. dist_set
             args = sm_dist.dist_set(args)
         else:
@@ -155,15 +154,15 @@ def main(args):
             print('>>>>>>>predicting : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
             exp.predict(setting, True)
 
-        torch.cuda.empty_cache()
-    
+#         torch.cuda.empty_cache()
+    print("End of Exp")
     ## copy code to model.tar.gz for predictor/inference
     
-#     if args.rank==0:
-#         copy_tree(f"/opt/ml/checkpoints/{setting}", os.path.join(os.environ['SM_MODEL_DIR'],setting))
-#         copy_tree("/opt/ml/checkpoints/results", os.path.join(os.environ['SM_MODEL_DIR'],"results"))
-#         shutil.copyfile("/opt/ml/checkpoints/test_report.json", os.environ['SM_MODEL_DIR'] + "/test_report.json")
-#         copy_tree("/opt/ml/code", os.environ['SM_MODEL_DIR'])
+    if args.rank==0:
+        copy_tree(f"/opt/ml/checkpoints/{setting}", os.path.join(os.environ['SM_MODEL_DIR'],setting))
+        copy_tree("/opt/ml/checkpoints/results", os.path.join(os.environ['SM_MODEL_DIR'],"results"))
+        shutil.copyfile("/opt/ml/checkpoints/test_report.json", os.environ['SM_MODEL_DIR'] + "/test_report.json")
+        copy_tree("/opt/ml/code", os.environ['SM_MODEL_DIR'])
 if __name__ == '__main__':
     args = arg_setting()
     args = check_sagemaker(args)

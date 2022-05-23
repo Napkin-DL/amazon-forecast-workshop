@@ -57,7 +57,7 @@ class Exp_Informer(Exp_Basic):
                 self.device
             ).float()
         
-        if self.args.use_gpu and self.args.smddp:
+        if self.args.use_gpu and self.args.use_multi_gpu:
             model = sm_dist.dist_model(model.to(self.device))
             model.cuda(self.args.local_rank)
 #             model = nn.DataParallel(model, device_ids=self.args.device_ids)
@@ -107,7 +107,7 @@ class Exp_Informer(Exp_Basic):
         #######################################################
         train_sampler = None
         
-        if self.args.use_gpu and self.args.smddp:
+        if self.args.use_gpu and self.args.use_multi_gpu:
             if flag == 'train':
                 shuffle_flag = False
                 train_sampler = torch.utils.data.distributed.DistributedSampler(
@@ -214,7 +214,7 @@ class Exp_Informer(Exp_Basic):
         
         
         best_model_path = path+'/'+'checkpoint.pth'
-        if self.args.use_multi_gpu and self.args.use_gpu and self.args.smddp:
+        if self.args.use_gpu and self.args.use_multi_gpu:
             sm_dist.barrier()
         self.model.load_state_dict(torch.load(best_model_path))
         
@@ -289,28 +289,24 @@ class Exp_Informer(Exp_Basic):
         
         preds = []
         
-        print("AAAAAAAAAAAAAA")
-        
         for i, (batch_x,batch_y,batch_x_mark,batch_y_mark, r_begin) in enumerate(pred_loader):
             pred, true = self._process_one_batch(
                 pred_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
             preds.append(pred.detach().cpu().numpy())
         
-        print("BBBBBBBBBBBBBB")
         preds = np.array(preds)
         preds = preds.reshape(-1, preds.shape[-2], preds.shape[-1])
         
-        print("CCCCCCCCCCCCCC")
+        
         # result save
         folder_path = os.path.join(self.args.checkpoints, 'results/' + setting +'/')
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
         
-        print("DDDDDDDDDDDDDD")
         self.args.setting = setting
         np.save(folder_path+'real_prediction.npy', preds)
         np.save(folder_path+'training_config.npy', self.args)
-        
+        print("End of Prediction")
         return
 
     def _process_one_batch(self, dataset_object, batch_x, batch_y, batch_x_mark, batch_y_mark):
