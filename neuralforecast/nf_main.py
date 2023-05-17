@@ -47,7 +47,7 @@ def prepare_dataset(args):
     return data
 
     
-def set_search_space(args):
+def set_nhits_config(args):
 
     # Use your own config or AutoNHITS.default_config
     nhits_config = {
@@ -56,21 +56,38 @@ def set_search_space(args):
            "input_size": tune.choice([args.horizon, args.horizon*2, args.horizon*3, args.horizon*5]),  # input_size = multiplier * horizon
            "batch_size": tune.choice([7]),                                           # Number of series in windows
            "windows_batch_size": tune.choice([256]),                                 # Number of windows in batch
-           # "n_pool_kernel_size": tune.choice([[2, 2, 2], [16, 8, 1]]),               # MaxPool's Kernelsize
-           # "n_freq_downsample": tune.choice([[168, 24, 1], [24, 12, 1], [1, 1, 1]]), # Interpolation expressivity ratios
+           "n_pool_kernel_size": tune.choice([[2, 2, 2], [16, 8, 1]]),               # MaxPool's Kernelsize
+           "n_freq_downsample": tune.choice([[168, 24, 1], [24, 12, 1], [1, 1, 1]]), # Interpolation expressivity ratios
            "activation": tune.choice(['ReLU']),                                      # Type of non-linear activation
            "n_blocks":  tune.choice([[1, 1, 1]]),                                    # Blocks per each 3 stacks
            "mlp_units":  tune.choice([[[512, 512], [512, 512], [512, 512]]]),        # 2 512-Layers per block for each stack
-           # "interpolation_mode": tune.choice(['linear']),                            # Type of multi-step interpolation
+           "interpolation_mode": tune.choice(['linear']),                            # Type of multi-step interpolation
            "val_check_steps": tune.choice([100]),                                    # Compute validation every 100 epochs
            "random_seed": tune.randint(1, 10),
         }
     return nhits_config
 
+def set_nbeats_config(args):
+
+    # Use your own config or AutoNHITS.default_config
+    nheats_config = {
+           "learning_rate": tune.choice([1e-3]),                                     # Initial Learning rate
+           "max_steps": tune.choice([1000]),                                         # Number of SGD steps
+           "input_size": tune.choice([args.horizon, args.horizon*2, args.horizon*3, args.horizon*5]),  # input_size = multiplier * horizon
+           "batch_size": tune.choice([7]),                                           # Number of series in windows
+           "windows_batch_size": tune.choice([256]),                                 # Number of windows in batch
+           "activation": tune.choice(['ReLU']),                                      # Type of non-linear activation
+           "n_blocks":  tune.choice([[1, 1, 1]]),                                    # Blocks per each 3 stacks
+           "mlp_units":  tune.choice([[[512, 512], [512, 512], [512, 512]]]),        # 2 512-Layers per block for each stack
+           "val_check_steps": tune.choice([100]),                                    # Compute validation every 100 epochs
+           "random_seed": tune.randint(1, 10),
+        }
+    return nheats_config
+
 def train_model(args):
     models = [
-        AutoNHITS(h=args.horizon, config=args.config, num_samples=args.num_samples),
-        AutoNBEATS(h=args.horizon, config=args.config, num_samples=args.num_samples),
+        AutoNHITS(h=args.horizon, config=args.nhits_config, num_samples=args.num_samples),
+        AutoNBEATS(h=args.horizon, config=args.nbeats_config, num_samples=args.num_samples),
     ]
     
     nf = NeuralForecast(
@@ -107,7 +124,8 @@ def check_sagemaker(args):
     
 def main(args):
     args.data = prepare_dataset(args)
-    args.config = set_search_space(args)
+    args.nhits_config = set_nhits_config(args)
+    args.nbeats_config = set_nbeats_config(args)
     res = train_model(args)
     
 if __name__ == '__main__':
